@@ -1,6 +1,7 @@
 import Usuario from "../models/Usuario.js"
 import generarID from "../helpers/generarID.js";
-import bcrypt from 'bcrypt'
+import generarJWT from "../helpers/generarJWT.js";
+
 
 const registrar = async (req,res)=> {
    
@@ -51,15 +52,68 @@ const autenticar = async (req, res)=>{
     res.json({
         _id:usuario._id,
         nombre: usuario.nombre,
-        email:usuario.email
+        email:usuario.email,
+        token: generarJWT(usuario._id),
     })
    }else{
     const error = new Error('PASSWORD INCORRECTO');
     return res.status(403).json({msg: error.message}) 
    }
 }
+const confirmar = async (req, res)=>{
+    const {token} = req.params
+    const usuarioConfirmar = await Usuario.findOne({token})
+    if(!usuarioConfirmar){
+        const error = new Error('HUBO UN ERROR DE CONFIRMACIÓN');
+    return res.status(403).json({msg: error.message}) 
+    }
+    try {
+        usuarioConfirmar.confirmado = true
+        usuarioConfirmar.token = ""
+        await usuarioConfirmar.save()
+
+        res.json({msg:'Usuario Confirmado Correctamente'})
+    } catch (error) {
+        console.log(error)
+        
+    }
+}
+const olvidePassword = async (req, res)=>{
+    const {email} = req.body;
+    // comprobar que el usuarion existe
+    const usuario = await Usuario.findOne({email})
+    if (!usuario){
+        const error = new Error('USUARIO NO ENCONTRADO');
+        return res.status(404).json({msg: error.message})       
+    } 
+    try {
+        usuario.token= generarID()
+        await usuario.save()
+        res.json({msg : "Hemos enviado un email con las instrucciones"})
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const comprobarToken = async (req, res)=>{
+      const {token} = req.params
+
+      const tokenValido = await Usuario.findOne({token})
+      if (tokenValido){
+        res.json({msg:'Token Válido y el Usuario existe'})
+      }else{
+        const error = new Error('token no válido');
+        return res.status(404).json({msg: error.message})   
+      }
+}
+
 export {
     registrar,
-    autenticar
+    autenticar,
+    confirmar,
+    olvidePassword,
+    comprobarToken
+   
 }
 
