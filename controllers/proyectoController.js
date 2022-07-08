@@ -1,4 +1,4 @@
-import Proyecto from "../models/Proyectos.js"
+import Proyecto from "../models/Proyecto.js"
 
 const obtenerProyectos = async (req, res) => {
     const proyectos = await Proyecto.find().where('creador').equals(req.usuario)

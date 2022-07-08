@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const proyectosSchema = mongoose.Schema({
+const proyectoSchema = mongoose.Schema({
     nombre: {
         type: String,
         trim: true,
@@ -37,5 +37,5 @@ const proyectosSchema = mongoose.Schema({
 }
 );
 
-const Proyecto =  mongoose.model("Proyecto", proyectosSchema)
+const Proyecto =  mongoose.model("Proyecto", proyectoSchema)
 export default Proyecto;
