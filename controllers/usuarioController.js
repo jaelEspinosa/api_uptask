@@ -1,6 +1,8 @@
 import Usuario from "../models/Usuario.js"
 import generarID from "../helpers/generarID.js";
 import generarJWT from "../helpers/generarJWT.js";
+import {emailRegistro} from '../helpers/emails.js'
+import {emailOlvidePassword} from '../helpers/emails.js'
 
 
 const registrar = async (req,res)=> {
@@ -18,8 +20,17 @@ const registrar = async (req,res)=> {
     try {
        const usuario = new Usuario(req.body) 
        usuario.token = generarID()
-       const usuarioAlmacenado = await usuario.save()
-       res.json(usuarioAlmacenado)       
+       await usuario.save()
+
+       //enviar el email de confirmacion
+       emailRegistro({
+        email : usuario.email,
+        nombre : usuario.nombre,
+        token : usuario.token
+
+       })
+
+       res.json({msg : "Usuario Creado Correctamente, Revisa tu Email para confirmar tu cuenta"})       
     } catch (error) {
        console.log(error) 
     }    
@@ -90,7 +101,12 @@ const olvidePassword = async (req, res)=>{
         usuario.token= generarID()
         await usuario.save()
         res.json({msg : "Hemos enviado un email con las instrucciones"})
-
+        emailOlvidePassword({
+            email : usuario.email,
+            nombre : usuario.nombre,
+            token : usuario.token
+    
+           })
     } catch (error) {
         console.log(error)
     }
@@ -103,7 +119,7 @@ const comprobarToken = async (req, res)=>{
       if (tokenValido){
         res.json({msg:'Token Válido y el Usuario existe'})
       }else{
-        const error = new Error('token no válido');
+        const error = new Error('Enlace inválido');
         return res.status(404).json({msg: error.message})   
       }
 }
