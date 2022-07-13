@@ -36,7 +36,7 @@ const corsOptions = {
 
 };
 
-app.use(cors(corsOptions))
+/* app.use(cors(corsOptions)) */
 
 // asi lo hacia en el bootcamp
 

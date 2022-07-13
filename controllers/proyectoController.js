@@ -32,13 +32,8 @@ const obtenerProyecto = async (req, res) => {
     return res.status(401).json({msg:error.message})
   }
 
-  // obtener las tareas del proyecto
-  const tareas = await Tarea.find().where("proyecto").equals(proyecto)
-   res.json(
-    {
-    proyecto,
-    tareas}
-  );
+  
+   res.json(proyecto);
 }
 
 const editarProyecto = async (req, res) => {
@@ -78,8 +73,9 @@ const eliminarProyecto = async (req, res) => {
      return res.status(401).json({msg:error.message})
    }
  try {
-     await Proyecto.deleteOne()
-    res.json({msg:'El Proyecgto ha sido Eliminado'})
+     await proyecto.deleteOne()
+     res.json({msg:'El Proyecto ha sido Eliminado'})
+     
  } catch (error) {
     console.log(error)
  }
