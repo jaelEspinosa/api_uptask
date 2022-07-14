@@ -2,7 +2,7 @@ import Proyecto from "../models/Proyecto.js"
 import Tarea from "../models/Tarea.js"
 
 const obtenerProyectos = async (req, res) => {
-    const proyectos = await Proyecto.find().where('creador').equals(req.usuario).select('-tareas')
+    const proyectos = await Proyecto.find().where('creador').equals(req.usuario).select('-tareas') 
 
     res.json(proyectos)
 }
