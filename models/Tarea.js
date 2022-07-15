@@ -12,7 +12,7 @@ const tareaSchema = mongoose.Schema({
         trim:true,
         required:true
     }, 
-    esstado:{
+    estado:{
         type:Boolean,
         default:false,
     },
