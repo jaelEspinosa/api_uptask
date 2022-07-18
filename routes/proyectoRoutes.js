@@ -7,6 +7,7 @@ import {
     eliminarProyecto,
     agregarColaborador,
     eliminarColaborador,
+    buscarColaborador
     
 } from "../controllers/proyectoController.js"
 import checkAuth from "../midlewares/checkAuth.js"
@@ -25,8 +26,9 @@ router
      .delete(checkAuth,eliminarProyecto)
 
 
-router.post('/agregar-colaborador/:id', checkAuth, agregarColaborador)
-router.post('/eliminar-colaborador/:id', checkAuth, eliminarColaborador)
+router.post('/colaboradores', checkAuth, buscarColaborador)
+router.post('/colaboradores/:id', checkAuth, agregarColaborador)
+router.delete('/colaboradores/:id', checkAuth, eliminarColaborador)
 
 
 export default router;
