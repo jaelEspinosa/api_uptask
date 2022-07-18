@@ -133,7 +133,29 @@ const agregarColaborador = async (req, res) => {
  res.json({msg:'colaborador agregado correctamente'})
 }
 
-const eliminarColaborador = async (req, res) => {}
+const eliminarColaborador = async (req, res) => {
+  const proyecto = await Proyecto.findById(req.params.id)
+ 
+  if (!proyecto){
+   const error = new Error('Proyecto No Encontrado')
+   return res.status(404).json({msg : error.message})
+  }
+ 
+  if (proyecto.creador.toString() !== req.usuario._id.toString()){
+   const error = new Error('Acción No válida')
+   return res.status(404).json({msg : error.message})
+  }
+  const {email} = req.body
+   
+  // esta todo ok eliminamos el colaborador
+
+ proyecto.colaboradores.pull(req.body.id)
+ 
+ await proyecto.save()
+ res.json({msg:'colaborador Eliminado con éxito'})
+  
+
+}
 
 
 
