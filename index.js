@@ -21,7 +21,7 @@ conectarDB()
 
 // configurar CORS // 
 
-const whitelist = [process.env.FRONTEND_URL, process.env.FRONTEND_URL2];
+const whitelist = [process.env.FRONTEND_URL];
 
 const corsOptions = {
     origin : function (origin, callback){
