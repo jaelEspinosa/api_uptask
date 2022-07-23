@@ -148,6 +148,14 @@ const perfil = async (req, res)=>{
     const {usuario} = req
     res.json(usuario)
 }
+const obtenerUsuarios = async (req, res)=>{
+  try {
+    const usuarios = await Usuario.find().select('-confirmado -createdAt -password -token -updatedAt -__v')
+    res.json(usuarios)
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 export {
     registrar,
@@ -156,7 +164,8 @@ export {
     olvidePassword,
     comprobarToken,
     nuevoPassword,
-    perfil
+    perfil,
+    obtenerUsuarios
    
 }
 
